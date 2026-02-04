@@ -1,170 +1,134 @@
-/* 1. RESET & BASE STYLES */
+/* 1. Global Setup */
 :root {
-    --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-    --gold-solid: #D4AF37;
-    --dark-bg: #0b0b0b;
-    --glass: rgba(255, 255, 255, 0.05);
-    --text-light: #f5f5f5;
+    --gold: #d4af37;
+    --accent-yellow: #fbc02d;
+    --text-dark: #1a1a1a;
+    --text-light: #666666;
+    --bg-color: #f4f1ea; /* Subtle paper-like background */
 }
 
-* {
+body {
+    font-family: 'Georgia', serif; /* Elegant magazine-style font */
+    background-color: var(--bg-color);
     margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    padding: 20px;
+    color: var(--text-dark);
 }
 
-body, html {
-    height: 100%;
-    width: 100%;
-    font-family: 'Playfair Display', serif;
-    background-color: var(--dark-bg);
-    color: var(--text-light);
+/* 2. Layout Container */
+.magazine-container {
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+/* 3. Product Card Styling */
+.product-card {
+    background: #ffffff;
+    margin-bottom: 50px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-radius: 4px;
     overflow: hidden;
 }
 
-/* 2. SWIPER CONTAINER CUSTOMIZATION */
-.swiper {
-    width: 100%;
-    height: 100vh;
+/* 4. The Image Grid (Jewelry on Left, Model on Right) */
+.image-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    background: #f0f0f0;
+    gap: 2px; /* Subtle line between images */
 }
 
-.swiper-slide {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end; /* Keeps jewelry info at the bottom for better thumb reach */
-    background-size: cover;
-    background-position: center;
+.img-wrapper {
     position: relative;
-    transition: transform 0.6s ease;
+    height: 450px; /* Fixed height for consistency */
 }
 
-/* 3. THE LUXURY OVERLAY (Vignette Effect) */
-/* This ensures the gold text is always readable regardless of the background image brightness */
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
+.img-wrapper img {
     width: 100%;
     height: 100%;
-    background: linear-gradient(to top, 
-        rgba(0,0,0,0.95) 0%, 
-        rgba(0,0,0,0.4) 40%, 
-        transparent 100%);
-    pointer-events: none;
+    object-fit: cover; /* Ensures images fill the box without stretching */
 }
 
-/* 4. CONTENT AREA */
-.content {
-    position: relative;
-    z-index: 10;
-    padding: 40px 30px 80px 30px; 
-    max-width: 600px;
-    animation: fadeInUp 1.2s ease-out;
-}
-
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.magazine-title {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(2rem, 8vw, 3.5rem);
-    background: var(--gold-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 15px;
+.label {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.85);
+    padding: 4px 12px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    line-height: 1.1;
+    letter-spacing: 1px;
+    font-family: sans-serif;
+    border-radius: 2px;
+}
+
+/* 5. Text Content Area */
+.content {
+    padding: 30px 40px;
+}
+
+.content h2 {
+    font-size: 2rem;
+    margin: 0 0 10px 0;
+    font-weight: 400;
 }
 
 .description {
-    font-size: 1.1rem;
+    color: var(--text-light);
     line-height: 1.6;
-    margin-bottom: 35px;
-    color: #cccccc;
-    font-family: 'Lato', sans-serif;
-    font-weight: 300;
-    letter-spacing: 0.5px;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
 }
 
-/* 5. THE "MAGIC" TRY-ON BUTTON */
-.btn-try-on {
-    background: var(--gold-gradient);
-    border: none;
-    padding: 18px 40px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #000;
-    text-transform: uppercase;
-    letter-spacing: 2.5px;
-    border-radius: 2px; /* Sharp corners for a more architectural, premium feel */
-    cursor: pointer;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+/* 6. Footer (Price & Button) */
+.footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #eeeeee;
+    padding-top: 20px;
+}
+
+.price {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+/* 7. The "Try It On" Button */
+.vto-btn {
+    background-color: var(--accent-yellow);
+    color: #000000;
+    text-decoration: none;
+    padding: 14px 28px;
+    font-weight: bold;
+    font-family: sans-serif;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     transition: all 0.3s ease;
-    display: inline-block;
-}
-
-.btn-try-on:hover {
-    transform: scale(1.03);
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-    filter: brightness(1.1);
-}
-
-.btn-try-on:active {
-    transform: scale(0.98);
-}
-
-/* 6. LANGUAGE TOGGLE (Fixed at top) */
-.lang-toggle {
-    position: fixed;
-    top: 30px;
-    right: 30px;
-    z-index: 1000;
-    color: var(--gold-solid);
-    font-family: 'Lato', sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 2px;
+    border: none;
     cursor: pointer;
-    border: 1px solid var(--gold-solid);
-    padding: 8px 15px;
-    background: rgba(0,0,0,0.5);
-    backdrop-filter: blur(5px);
-    transition: 0.3s;
 }
 
-.lang-toggle:hover {
-    background: var(--gold-solid);
-    color: #000;
+.vto-btn:hover {
+    background-color: #f9a825;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* 7. PAGINATION (GOLD DOTS) */
-.swiper-pagination-bullet {
-    background: #fff !important;
-    opacity: 0.3;
-}
-
-.swiper-pagination-bullet-active {
-    background: var(--gold-solid) !important;
-    opacity: 1;
-    width: 25px; /* Elegantly elongated active dot */
-    border-radius: 10px;
-    transition: width 0.3s ease;
-}
-
-/* 8. MOBILE OPTIMIZATION */
-@media (max-width: 480px) {
-    .content {
-        padding: 30px 20px 100px 20px;
+/* 8. Mobile Responsiveness */
+@media (max-width: 768px) {
+    .image-split {
+        grid-template-columns: 1fr; /* Stack images vertically on small screens */
     }
-    
-    .magazine-title {
-        font-size: 2.2rem;
+    .img-wrapper {
+        height: 350px;
     }
-    
-    .btn-try-on {
-        width: 100%; /* Full width button for easier tapping on mobile */
+    .footer-row {
+        flex-direction: column;
+        gap: 15px;
         text-align: center;
     }
 }

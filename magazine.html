@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jewelry Digital Magazine</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+
+    <style>
+        /* --- DESIGN & STYLING --- */
+        :root {
+            --gold: #d4af37;
+            --accent-yellow: #fbc02d;
+            --text-main: #1a1a1a;
+            --bg-paper: #f4f1ea;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background-color: var(--bg-paper);
+            margin: 0;
+            padding: 0;
+            color: var(--text-main);
+        }
+
+        header {
+            background: var(--white);
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 2px solid #333;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            margin: 0;
+        }
+
+        .magazine-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 100px 20px;
+        }
+
+        .product-card {
+            background: var(--white);
+            margin-bottom: 60px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        /* The side-by-side images */
+        .image-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #f0f0f0;
+        }
+
+        .img-wrapper {
+            position: relative;
+            height: 450px;
+        }
+
+        .img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .label {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 12px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: sans-serif;
+        }
+
+        .content {
+            padding: 35px;
+            text-align: center;
+        }
+
+        .content h2 {
+            font-size: 2.2rem;
+            margin: 0 0 15px 0;
+            font-weight: normal;
+        }
+
+        .description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-top: 25px;
+        }
+
+        .price {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        /* The VTO Button style matching your screenshot */
+        .vto-btn {
+            background-color: var(--accent-yellow);
+            color: #000;
+            text-decoration: none;
+            padding: 12px 25px;
+            font-weight: bold;
+            font-family: sans-serif;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .vto-btn:hover {
+            background-color: #f9a825;
+            transform: scale(1.03);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive: stack images on mobile */
+        @media (max-width: 700px) {
+            .image-split { grid-template-columns: 1fr; }
+            .img-wrapper { height: 350px; }
+            .footer-row { flex-direction: column; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Royal Collection</h1>
+        <p>Wednesday, February 4, 2026</p>
+    </header>
+
+    <div id="magazine" class="magazine-container">
+        <p style="text-align:center;">Connecting to Google Sheets...</p>
+    </div>
+
+    <script>
+        /* --- LOGIC & DATA FETCHING --- */
+        
+        // 1. YOUR CONFIGURATION
+        // Ensure you have followed: File > Share > Publish to Web > CSV
+        const CSV_URL = 'PASTE_YOUR_CSV_URL_HERE';
+
+        async function loadMagazine() {
+            const container = document.getElementById('magazine');
+
+            Papa.parse(CSV_URL, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    renderItems(results.data);
+                },
+                error: function() {
+                    container.innerHTML = '<p style="color:red; text-align:center;">Error: Make sure your Google Sheet is "Published to Web" as a CSV.</p>';
+                }
+            });
+        }
+
+        function renderItems(items) {
+            const container = document.getElementById('magazine');
+            container.innerHTML = ''; // Clear loading text
+
+            items.forEach(item => {
+                // Check if the row has a name to avoid empty cards
+                if (!item.Name) return;
+
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="image-split">
+                        <div class="img-wrapper">
+                            <img src="${item.JewelryURL}" alt="Jewelry">
+                            <span class="label">Jewelry Image</span>
+                        </div>
+                        <div class="img-wrapper">
+                            <img src="${item.ModelURL}" alt="Model">
+                            <span class="label">AI Model Image</span>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <h2>${item.Name}</h2>
+                        <p class="description">${item.Description}</p>
+                        <div class="footer-row">
+                            <div class="price">Price: ${item.Price}</div>
+                            <a href="${item.VTO_URL}" target="_blank" class="vto-btn">
+                                <span>😊</span> TRY IT ON!
+                            </a>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Start
+        window.onload = loadMagazine;
+    </script>
+</body>
+</html>
