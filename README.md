@@ -1,1 +1,1 @@
-# digiMagzine
+# DIGIGM
